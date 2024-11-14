@@ -121,6 +121,39 @@ prove(L => R) :-
  */
 % Write your code here
 
+% Left disjunction (A v B on the left)
+prove(L => R) :-
+  member(A v B, L),          % Check for A v B in the premises (L).
+  del(A v B, L, NewL),       % Remove A v B from the premises.
+
+  % Branch 1: Add A to the premises and prove.
+  nl, write('\tFirst branch: '),
+  nl, write('=\t'), write([A | NewL] => R),
+  write('\t (by or/left)'),
+  prove([A | NewL] => R),
+
+  % Branch 2: Add B to the premises and prove.
+  nl, write('\tSecond branch: '),
+  nl, write('=\t'), write([B | NewL] => R),
+  write('\t (by or/left)'),
+  prove([B | NewL] => R).
+
+% Right conjunction (A ^ B on the right)
+prove(L => R) :-
+  member(A ^ B, R),          % Check for A ^ B in the conclusions (R).
+  del(A ^ B, R, NewR),       % Remove A ^ B from the conclusions.
+
+  % Branch 1: Add A to the conclusions and prove.
+  nl, write('\tFirst branch: '),
+  nl, write('=\t'), write(L => [A | NewR]),
+  write('\t (by and/right)'),
+  prove(L => [A | NewR]),
+
+  % Branch 2: Add B to the conclusions and prove.
+  nl, write('\tSecond branch: '),
+  nl, write('=\t'), write(L => [B | NewR]),
+  write('\t (by and/right)'),
+  prove(L => [B | NewR]).
 
 
 /*
